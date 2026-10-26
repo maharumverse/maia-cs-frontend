@@ -1,0 +1,45 @@
+.range-presets {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.chart-card {
+  margin-bottom: 18px;
+}
+
+.grid-2 .chart-card {
+  margin-bottom: 0;
+}
+
+.chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.chart-head h2 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.chart-head p {
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.chart-switch {
+  display: flex;
+  gap: 6px;
+}
+
+.range-error {
+  margin-bottom: 14px;
+}
+
+.chart-stack {
+  margin-bottom: 18px;
+}

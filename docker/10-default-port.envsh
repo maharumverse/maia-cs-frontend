@@ -1,0 +1,3 @@
+# Cloud Run selalu menyuntikkan PORT. Nilai bawaan ini hanya untuk docker run di lokal.
+# Berkas .envsh di-source oleh entrypoint nginx, jadi nilainya ikut terbaca oleh envsubst template.
+export PORT="${PORT:-8080}"

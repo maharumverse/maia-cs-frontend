@@ -1,0 +1,95 @@
+# Pipeline frontend MAIA CS, dari template/cloudbuild.frontend.template.yaml.
+# Trigger mengirim dua substitusi saja:
+#   --substitutions='_TAG=$SHORT_SHA,_API_BASE_URL=https://[HOST_BACKEND]'  (kutip tunggal)
+# Manual dari terminal:
+#   gcloud builds submit --config cloudbuild.yaml "--substitutions=_TAG=$TAG,_API_BASE_URL=$API_BASE_URL"
+#
+# Konfigurasi SPA ditanam saat build lewat --build-arg, bukan saat deploy. Mengganti alamat backend
+# atau mode login berarti build ulang. Semua nilai di sini publik: tidak ada secret yang boleh lewat
+# substitusi karena substitusi terlihat di log build dan konfigurasi trigger.
+# Langkah deploy sengaja tanpa --env-vars-file dan --set-secrets supaya konfigurasi tetap milik terminal.
+
+substitutions:
+  _REGION: asia-southeast1
+  _REPOSITORY: maharum
+  _SERVICE: maia-cs-frontend
+  # Wajib dari luar. Berupa origin saja: skema dan host, tanpa path dan tanpa slash di belakang.
+  # Klien HTTP menambahkan api/v1 sendiri. Bawaan sengaja salah supaya lupa mengisi menggagalkan build.
+  _API_BASE_URL: "BELUM_DIISI"
+  # sso atau stopgap. Samakan dengan AUTH_MODE di backend. Pakai sso hanya bila frontend ini sudah
+  # dilayani dari domain maharum.group, karena cookie SSO tidak akan sampai ke alamat .run.app.
+  _AUTH_MODE: stopgap
+  # Hanya dipakai pada _AUTH_MODE=sso. Nilai bawaan dari template, dikonfirmasi ke pemilik Identity Provider.
+  _SSO_LOGIN_URL: "https://sso.maharum.group/login"
+  # Bawaan latest ada supaya build manual tanpa tag tidak gagal karena kunci tak dideklarasikan.
+  # Guard di bawah menolaknya: latest tidak boleh dideploy.
+  _TAG: latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${_TAG}
+
+steps:
+  - id: check-substitutions
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        fail() { echo "GAGAL: $$1"; exit 1; }
+        [ -n "${_TAG}" ] && [ "${_TAG}" != "latest" ] || fail "_TAG kosong atau latest. Kirim _TAG=<tag>."
+        [ -n "${_API_BASE_URL}" ] && [ "${_API_BASE_URL}" != "BELUM_DIISI" ] || fail "_API_BASE_URL belum diisi."
+        echo "${_API_BASE_URL}" | grep -Eq '^https?://[^/?#[:space:]]+$$' || fail "_API_BASE_URL harus berupa origin saja: tanpa path, tanpa slash di belakang."
+        case "${_AUTH_MODE}" in
+          stopgap) ;;
+          sso) [ -n "${_SSO_LOGIN_URL}" ] || fail "_SSO_LOGIN_URL wajib diisi pada _AUTH_MODE=sso." ;;
+          *) fail "_AUTH_MODE harus sso atau stopgap." ;;
+        esac
+        echo "_SERVICE      = ${_SERVICE}"
+        echo "_API_BASE_URL = ${_API_BASE_URL}"
+        echo "_AUTH_MODE    = ${_AUTH_MODE}"
+        echo "_TAG          = ${_TAG}"
+
+  # Satu --build-arg per ARG yang dideklarasikan Dockerfile. Build-arg yang tidak dikenal diabaikan
+  # diam-diam, jadi daftar ini harus sama dengan Dockerfile.
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg
+      - VITE_API_BASE_URL=${_API_BASE_URL}
+      - --build-arg
+      - VITE_AUTH_MODE=${_AUTH_MODE}
+      - --build-arg
+      - VITE_SSO_LOGIN_URL=${_SSO_LOGIN_URL}
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${_TAG}
+      - .
+
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${_TAG}
+
+  # Alokasi frontend sesuai deploy.rules.md: 1 vCPU, 512Mi, max-instances 2, concurrency 80.
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:${_TAG}
+      - --region=${_REGION}
+      - --platform=managed
+      - --cpu=1
+      - --memory=512Mi
+      - --min-instances=0
+      - --max-instances=2
+      - --concurrency=80
+      - --port=8080
+      - --timeout=60
+      - --allow-unauthenticated

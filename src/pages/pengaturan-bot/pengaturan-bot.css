@@ -1,0 +1,128 @@
+/* Gaya khusus halaman Pengaturan Bot; memakai variabel dari :root. */
+.card > h2 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.section-intro {
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.card + .card,
+form > .card {
+  margin-bottom: 18px;
+}
+
+.bot-textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 9px 12px;
+  font-size: 13.5px;
+  font-family: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--surface);
+  outline: none;
+}
+
+.bot-textarea:focus {
+  border-color: var(--accent);
+}
+
+.field-error {
+  font-size: 12px;
+  color: var(--bad-tua);
+  margin-top: 5px;
+}
+
+.field input[aria-invalid='true'] {
+  border-color: var(--bad);
+}
+
+.char-count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.list-editor {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.list-editor legend {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink2);
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.list-items {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.list-items li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 6px 6px 12px;
+  font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+
+.list-items li + li {
+  border-top: 1px solid var(--line2);
+}
+
+.list-add {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.list-add .field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.list-add .btn {
+  margin-bottom: 1px;
+}
+
+.advanced summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 6px 0;
+}
+
+.advanced[open] summary {
+  margin-bottom: 8px;
+}
+
+.version-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag + span,
+span + .tag {
+  margin-left: 8px;
+}
+
+@media (max-width: 900px) {
+  .list-add {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,16 @@
+node_modules
+dist
+dev-dist
+coverage
+.git
+.gitignore
+.env
+.env.*
+.last-tag
+test-results
+playwright-report
+blob-report
+playwright
+Dockerfile
+.dockerignore
+*.md

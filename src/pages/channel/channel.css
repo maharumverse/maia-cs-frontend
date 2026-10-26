@@ -1,0 +1,222 @@
+/* Gaya khusus halaman Channel. Hanya memakai variabel :root dan kelas yang sudah ada. */
+
+.ch-group {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line2);
+}
+
+.ch-group h3,
+.ch-sub h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.ch-sub {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line2);
+}
+
+.ch-sub-body {
+  margin-top: 14px;
+}
+
+.ch-left {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ch-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ch-panel-head h2 {
+  margin: 0;
+}
+
+.ch-grid-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 18px;
+}
+
+/* Saklar dan kotak centang berada di luar .field supaya tidak ikut gaya input selebar penuh */
+.ch-switch {
+  margin-bottom: 14px;
+}
+
+.ch-switch label,
+.ch-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.ch-switch input,
+.ch-check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.ch-days {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+
+.ch-days legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink2);
+}
+
+.ch-check {
+  font-weight: 500;
+}
+
+.ch-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ch-add-row .btn {
+  flex: none;
+}
+
+.ch-err {
+  color: var(--bad-tua);
+}
+
+.ch-chip {
+  gap: 6px;
+  padding-right: 4px;
+  word-break: break-all;
+}
+
+.ch-chip-x {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ch-chip-x:hover {
+  background: var(--line);
+}
+
+.ch-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 16px;
+}
+
+.ch-facts dt {
+  font-size: 12px;
+  color: var(--ink2);
+  margin-bottom: 4px;
+}
+
+.ch-facts dd {
+  margin: 0;
+}
+
+.ch-checklist {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.ch-checklist li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line2);
+  font-size: 13.5px;
+}
+
+.ch-qr {
+  display: block;
+  width: 240px;
+  height: 240px;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.ch-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink2);
+}
+
+.ch-code-box {
+  margin-top: 6px;
+}
+
+.ch-code {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+.ch-live {
+  margin-top: 18px;
+}
+
+.field textarea.inp {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .ch-grid-3,
+  .ch-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .ch-add-row {
+    flex-direction: column;
+  }
+
+  .ch-chip-x {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ch-switch label,
+  .ch-check {
+    min-height: 44px;
+  }
+}
